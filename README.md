@@ -1,6 +1,6 @@
-## lambda-mobility
+## spatiotemporal-urban-inference
 
-A distributed urban intelligence platform turning municipal transit fleets and edge sensor networks into real-time sensing grids. Built on top of Apache Kafka streaming and Apache Spark MLlib, the system continuously ingests arterial corridor telemetry to perform subsecond multimodal journey routing, automated optical ANPR enforcement, and predictive hydrological flood modeling across high-density urban networks.
+An implementation of a distributed urban intelligence platform turning municipal transit fleets and edge sensor networks into real-time sensing grids. Built on top of Apache Kafka streaming and Apache Spark MLlib, the system continuously ingests arterial corridor telemetry to perform subsecond multimodal journey routing, automated optical ANPR enforcement, and predictive hydrological flood modeling across high-density urban networks.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB.svg?logo=python&logoColor=white)](https://www.python.org/)
@@ -9,56 +9,58 @@ A distributed urban intelligence platform turning municipal transit fleets and e
 [![Apache Spark](https://img.shields.io/badge/Apache_Spark-MLlib-E25A1C.svg?logo=apachespark&logoColor=white)](https://spark.apache.org/)
 [![Apache Kafka](https://img.shields.io/badge/Apache_Kafka-Streaming-231F20.svg?logo=apachekafka&logoColor=white)](https://kafka.apache.org/)
 
-
----
-
 ## Install
 
 ```bash
 $ pip install -r requirements.txt
 ```
 
-Or clone the full monorepo:
+Or clone the full repository:
 
 ```bash
-$ git clone https://github.com/yuvanvishnupandi/lambda-mobility.git
-$ cd lambda-mobility
+$ git clone https://github.com/yuvanvishnupandi/spatiotemporal-urban-inference.git
+$ cd spatiotemporal-urban-inference
 ```
-
----
 
 ## Usage
 
-### 1. Ingesting IoT Telemetry via Kafka Stream Simulation
+### Ingesting IoT Telemetry via Kafka Stream Simulation
 
 ```python
 from bigdata_engine.pipelines.kafka_streaming import KafkaTrafficStreamEngine
 
 # initialize distributed broker simulation
+
 engine = KafkaTrafficStreamEngine()
 
 # produce partition-aware edge observations along GST Road (NH 45)
+
 batch = engine.generate_streaming_batch(batch_size = 12)
 
 print(f"Produced {len(batch)} IoT edge events to Kafka broker.")
 ```
 
-### 2. Real-Time Spark MLlib Congestion Classification
+### Real-Time Spark MLlib Congestion Classification
 
 ```python
-from bigdata_engine.api_bridge import predict_traffic_congestion, TrafficPredictionRequest
+from bigdata_engine.api_bridge import (
+    predict_traffic_congestion,
+    TrafficPredictionRequest
+)
 
 # observation feature vector from edge camera sensor
+
 request = TrafficPredictionRequest(
-    car_count = 45,
-    bike_count = 32,
-    bus_count = 8,
+    car_count   = 45,
+    bike_count  = 32,
+    bus_count   = 8,
     truck_count = 12,
-    hour = 17,             # 5:00 PM peak slot
-    day_of_week = 4        # Friday
+    hour        = 17,    # 5:00 PM peak slot
+    day_of_week = 4      # Friday
 )
 
 # infer congestion regime via 100-tree Random Forest ensemble
+
 response = predict_traffic_congestion(request)
 
 print(response["predicted_situation"])  # 'heavy'
@@ -66,17 +68,21 @@ print(response["confidence"])           # 0.9983
 print(response["estimated_delay_min"])  # 18.5
 ```
 
-### 3. Hydrological Flood Risk Inference
+### Hydrological Flood Risk Inference
 
 ```python
-from bigdata_engine.api_bridge import predict_tn_flood_risk, FloodPredictionRequest
+from bigdata_engine.api_bridge import (
+    predict_tn_flood_risk,
+    FloodPredictionRequest
+)
 
 # meteorological rainfall & reservoir telemetry
+
 request = FloodPredictionRequest(
-    district = "Chengalpattu",
-    rainfall_mm = 142.5,
+    district                = "Chengalpattu",
+    rainfall_mm             = 142.5,
     sluice_discharge_cusecs = 8200.0,
-    drainage_capacity_pci = 0.42
+    drainage_capacity_pci   = 0.42
 )
 
 result = predict_tn_flood_risk(request)
@@ -84,8 +90,6 @@ result = predict_tn_flood_risk(request)
 print(result["risk_level"])             # 'HIGH'
 print(result["inundation_probability"])  # 0.8427
 ```
-
----
 
 ## System Architecture
 
@@ -124,8 +128,6 @@ graph TD
     HDFS --> METASTORE
 ```
 
----
-
 ## Empirical Benchmarks
 
 Trained on municipal arterial corridor telemetry (2,976 records, 339,914 individual vehicle observations):
@@ -146,11 +148,10 @@ Trained on municipal arterial corridor telemetry (2,976 records, 339,914 individ
 | **Mean Absolute Error (MAE)** | **0.0157** | $< 0.03$ |
 | **TN Flood Classification Accuracy** | **99.50%** | $> 95.0\%$ |
 
----
-
-## Quick Start (Local & Cloud)
+## Quick Start
 
 ### Master Launcher
+
 Run the entire platform (Big Data Engine + React frontend) in a single command:
 
 ```powershell
@@ -158,6 +159,7 @@ $ py -3.11 start_system.py
 ```
 
 ### Standalone Services
+
 ```bash
 # FastAPI Gateway (http://127.0.0.1:8000)
 $ python bigdata_engine/server.py
@@ -166,11 +168,10 @@ $ python bigdata_engine/server.py
 $ cd frontend && npm install && npm run dev
 ```
 
-### Cloud Deployments
+### Deployments
+
 - **Frontend:** Hosted on [Vercel](https://lambda-mobility.vercel.app)
 - **Backend:** Hosted on [Render](https://lambda-mobility-api.onrender.com)
-
----
 
 ## Citations
 
@@ -230,8 +231,6 @@ $ cd frontend && npm install && npm run dev
   year    = {2018}
 }
 ```
-
----
 
 ## License
 
