@@ -1,4 +1,4 @@
-## spatiotemporal-urban-inference
+## urban-sensing-spark
 
 An implementation of a distributed urban intelligence platform turning municipal transit fleets and edge sensor networks into real-time sensing grids. Built on top of Apache Kafka streaming and Apache Spark MLlib, the system continuously ingests arterial corridor telemetry to perform subsecond multimodal journey routing, automated optical ANPR enforcement, and predictive hydrological flood modeling across high-density urban networks.
 
@@ -18,8 +18,8 @@ $ pip install -r requirements.txt
 Or clone the full repository:
 
 ```bash
-$ git clone https://github.com/yuvanvishnupandi/spatiotemporal-urban-inference.git
-$ cd spatiotemporal-urban-inference
+$ git clone https://github.com/yuvanvishnupandi/urban-sensing-spark.git
+$ cd urban-sensing-spark
 ```
 
 ## Usage
